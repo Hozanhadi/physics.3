@@ -1,0 +1,576 @@
+<!doctype html>
+<html lang="ar" dir="rtl" class="h-full">
+ <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>اختبار الفيزياء - الحركة المتسارعة</title>
+  <script src="https://cdn.tailwindcss.com/3.4.17"></script>
+  <script src="/_sdk/element_sdk.js"></script>
+  <script src="/_sdk/data_sdk.js"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800&amp;display=swap" rel="stylesheet">
+  <style>
+    * { font-family: 'Tajawal', sans-serif; }
+    .gradient-bg {
+      background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+    }
+    .card-glass {
+      background: rgba(255, 255, 255, 0.05);
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+    .btn-primary {
+      background: linear-gradient(135deg, #e94560 0%, #ff6b6b 100%);
+      transition: all 0.3s ease;
+    }
+    .btn-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 10px 30px rgba(233, 69, 96, 0.4);
+    }
+    .option-btn {
+      transition: all 0.3s ease;
+    }
+    .option-btn:hover {
+      transform: translateX(-5px);
+      background: rgba(233, 69, 96, 0.2);
+    }
+    .option-btn.selected {
+      background: rgba(233, 69, 96, 0.3);
+      border-color: #e94560;
+    }
+    .option-btn.correct {
+      background: rgba(34, 197, 94, 0.3);
+      border-color: #22c55e;
+    }
+    .option-btn.wrong {
+      background: rgba(239, 68, 68, 0.3);
+      border-color: #ef4444;
+    }
+    .progress-bar {
+      background: linear-gradient(90deg, #e94560, #ff6b6b);
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .animate-fade { animation: fadeIn 0.5s ease forwards; }
+    @keyframes pulse {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.05); }
+    }
+    .pulse { animation: pulse 2s infinite; }
+    .scrollbar-thin::-webkit-scrollbar { width: 6px; }
+    .scrollbar-thin::-webkit-scrollbar-track { background: rgba(255,255,255,0.1); border-radius: 3px; }
+    .scrollbar-thin::-webkit-scrollbar-thumb { background: #e94560; border-radius: 3px; }
+  </style>
+  <style>body { box-sizing: border-box; }</style>
+ </head>
+ <body class="h-full gradient-bg text-white overflow-auto">
+  <div id="app" class="min-h-full w-full"><!-- Login Page -->
+   <div id="loginPage" class="min-h-full flex items-center justify-center p-4">
+    <div class="card-glass rounded-3xl p-8 w-full max-w-md animate-fade">
+     <div class="text-center mb-8">
+      <div class="w-20 h-20 mx-auto mb-4 rounded-full bg-gradient-to-br from-pink-500 to-red-500 flex items-center justify-center pulse">
+       <svg class="w-10 h-10" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"></path>
+       </svg>
+      </div>
+      <h1 id="mainTitle" class="text-3xl font-bold mb-2">اختبار الفيزياء</h1>
+      <p class="text-gray-400">الفصل الثالث: الحركة المتسارعة</p>
+     </div>
+     <div class="space-y-4">
+      <div><label class="block text-sm text-gray-300 mb-2">اسم الطالب</label> <input type="text" id="studentName" placeholder="أدخل اسمك الكامل" class="w-full px-4 py-3 rounded-xl bg-white/10 border border-white/20 focus:border-pink-500 focus:outline-none transition">
+      </div>
+      <div><label class="block text-sm text-gray-300 mb-2">كلمة المرور</label> <input type="password" id="studentPassword" placeholder="أدخل كلمة المرور" class="w-full px-4 py-3 rounded-xl bg-white/10 border border-white/20 focus:border-pink-500 focus:outline-none transition">
+      </div>
+      <div id="loginError" class="hidden text-red-400 text-sm text-center"></div><button onclick="handleLogin()" class="w-full btn-primary text-white font-bold py-3 rounded-xl"> دخول للاختبار </button>
+      <div class="text-center pt-4 border-t border-white/10"><button onclick="showAdminLogin()" class="text-gray-400 hover:text-pink-400 text-sm transition"> 🔐 دخول المدير </button>
+      </div>
+     </div>
+    </div>
+   </div><!-- Admin Login -->
+   <div id="adminLoginPage" class="hidden min-h-full flex items-center justify-center p-4">
+    <div class="card-glass rounded-3xl p-8 w-full max-w-md animate-fade">
+     <div class="text-center mb-8">
+      <div class="w-20 h-20 mx-auto mb-4 rounded-full bg-gradient-to-br from-purple-500 to-indigo-500 flex items-center justify-center">
+       <svg class="w-10 h-10" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5.121 17.804A13.937 13.937 0 0112 16c2.5 0 4.847.655 6.879 1.804M15 10a3 3 0 11-6 0 3 3 0 016 0zm6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+       </svg>
+      </div>
+      <h1 class="text-3xl font-bold mb-2">لوحة المدير</h1>
+      <p class="text-gray-400">تسجيل دخول المدير</p>
+     </div>
+     <div class="space-y-4">
+      <div><label class="block text-sm text-gray-300 mb-2">اسم المستخدم</label> <input type="text" id="adminUsername" placeholder="اسم المستخدم" class="w-full px-4 py-3 rounded-xl bg-white/10 border border-white/20 focus:border-purple-500 focus:outline-none transition">
+      </div>
+      <div><label class="block text-sm text-gray-300 mb-2">كلمة المرور</label> <input type="password" id="adminPassword" placeholder="كلمة المرور" class="w-full px-4 py-3 rounded-xl bg-white/10 border border-white/20 focus:border-purple-500 focus:outline-none transition">
+      </div>
+      <div id="adminLoginError" class="hidden text-red-400 text-sm text-center"></div><button onclick="handleAdminLogin()" class="w-full bg-gradient-to-r from-purple-500 to-indigo-500 hover:from-purple-600 hover:to-indigo-600 text-white font-bold py-3 rounded-xl transition"> دخول </button> <button onclick="backToLogin()" class="w-full text-gray-400 hover:text-white py-2 transition"> ← العودة </button>
+     </div>
+    </div>
+   </div><!-- Quiz Page -->
+   <div id="quizPage" class="hidden min-h-full p-4">
+    <div class="max-w-3xl mx-auto"><!-- Header -->
+     <div class="card-glass rounded-2xl p-4 mb-4">
+      <div class="flex justify-between items-center mb-3">
+       <div><span class="text-gray-400 text-sm">الطالب:</span> <span id="displayStudentName" class="font-bold text-pink-400 mr-2"></span>
+       </div>
+       <div class="text-left"><span class="text-gray-400 text-sm">السؤال</span> <span id="questionNumber" class="font-bold text-2xl text-pink-400 mx-2">1</span> <span class="text-gray-400 text-sm">من 25</span>
+       </div>
+      </div>
+      <div class="h-2 bg-white/10 rounded-full overflow-hidden">
+       <div id="progressBar" class="h-full progress-bar rounded-full transition-all duration-500" style="width: 4%"></div>
+      </div>
+     </div><!-- Question Card -->
+     <div class="card-glass rounded-2xl p-6 mb-4 animate-fade" id="questionCard">
+      <div id="questionType" class="inline-block px-3 py-1 rounded-full text-xs font-bold mb-4 bg-pink-500/20 text-pink-400"></div>
+      <h2 id="questionText" class="text-xl font-bold mb-6 leading-relaxed"></h2>
+      <div id="optionsContainer" class="space-y-3"></div>
+      <div id="problemSolution" class="hidden mt-4 p-4 rounded-xl bg-white/5 border border-white/10">
+       <p class="text-gray-300 text-sm" id="solutionText"></p>
+      </div>
+     </div><!-- Navigation -->
+     <div class="flex gap-3"><button id="prevBtn" onclick="prevQuestion()" class="flex-1 card-glass py-3 rounded-xl font-bold hover:bg-white/10 transition disabled:opacity-50" disabled> ← السابق </button> <button id="nextBtn" onclick="nextQuestion()" class="flex-1 btn-primary py-3 rounded-xl font-bold"> التالي → </button> <button id="submitBtn" onclick="submitQuiz()" class="hidden flex-1 bg-gradient-to-r from-green-500 to-emerald-500 py-3 rounded-xl font-bold hover:from-green-600 hover:to-emerald-600 transition"> إرسال الإجابات ✓ </button>
+     </div>
+    </div>
+   </div><!-- Results Page -->
+   <div id="resultsPage" class="hidden min-h-full flex items-center justify-center p-4">
+    <div class="card-glass rounded-3xl p-8 w-full max-w-lg text-center animate-fade">
+     <div id="resultIcon" class="w-24 h-24 mx-auto mb-6 rounded-full flex items-center justify-center text-5xl"></div>
+     <h1 class="text-3xl font-bold mb-2">نتيجة الاختبار</h1>
+     <p id="resultStudentName" class="text-gray-400 mb-6"></p>
+     <div class="grid grid-cols-2 gap-4 mb-6">
+      <div class="card-glass rounded-xl p-4">
+       <p class="text-gray-400 text-sm">الدرجة</p>
+       <p id="scoreDisplay" class="text-3xl font-bold text-pink-400"></p>
+      </div>
+      <div class="card-glass rounded-xl p-4">
+       <p class="text-gray-400 text-sm">النسبة المئوية</p>
+       <p id="percentageDisplay" class="text-3xl font-bold text-green-400"></p>
+      </div>
+     </div>
+     <div id="resultMessage" class="text-lg mb-6"></div><button onclick="restartQuiz()" class="btn-primary w-full py-3 rounded-xl font-bold"> إعادة الاختبار </button>
+    </div>
+   </div><!-- Admin Panel -->
+   <div id="adminPanel" class="hidden min-h-full p-4">
+    <div class="max-w-4xl mx-auto">
+     <div class="card-glass rounded-2xl p-6 mb-4">
+      <div class="flex justify-between items-center">
+       <div>
+        <h1 class="text-2xl font-bold">لوحة تحكم المدير</h1>
+        <p class="text-gray-400">مرحباً Hozan</p>
+       </div><button onclick="logoutAdmin()" class="px-4 py-2 rounded-xl bg-red-500/20 text-red-400 hover:bg-red-500/30 transition"> تسجيل الخروج </button>
+      </div>
+     </div>
+     <div class="card-glass rounded-2xl p-6">
+      <div class="flex justify-between items-center mb-6">
+       <h2 class="text-xl font-bold">نتائج الطلاب</h2><span id="totalStudents" class="px-3 py-1 rounded-full bg-pink-500/20 text-pink-400 text-sm"></span>
+      </div>
+      <div id="studentsTable" class="overflow-x-auto">
+       <table class="w-full">
+        <thead>
+         <tr class="border-b border-white/10">
+          <th class="text-right py-3 px-4 text-gray-400 font-medium">#</th>
+          <th class="text-right py-3 px-4 text-gray-400 font-medium">اسم الطالب</th>
+          <th class="text-right py-3 px-4 text-gray-400 font-medium">الدرجة</th>
+          <th class="text-right py-3 px-4 text-gray-400 font-medium">النسبة</th>
+          <th class="text-right py-3 px-4 text-gray-400 font-medium">التاريخ</th>
+          <th class="text-right py-3 px-4 text-gray-400 font-medium">إجراء</th>
+         </tr>
+        </thead>
+        <tbody id="studentsBody"></tbody>
+       </table>
+      </div>
+      <div id="noStudents" class="hidden text-center py-12 text-gray-400">
+       <svg class="w-16 h-16 mx-auto mb-4 opacity-50" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"></path>
+       </svg>
+       <p>لا يوجد طلاب حتى الآن</p>
+      </div>
+     </div>
+    </div>
+   </div><!-- Delete Confirmation Modal -->
+   <div id="deleteModal" class="hidden fixed inset-0 bg-black/50 flex items-center justify-center p-4 z-50">
+    <div class="card-glass rounded-2xl p-6 w-full max-w-sm animate-fade">
+     <h3 class="text-xl font-bold mb-4 text-center">تأكيد الحذف</h3>
+     <p class="text-gray-400 text-center mb-6">هل أنت متأكد من حذف نتيجة هذا الطالب؟</p>
+     <div class="flex gap-3"><button onclick="cancelDelete()" class="flex-1 card-glass py-2 rounded-xl hover:bg-white/10 transition">إلغاء</button> <button onclick="confirmDelete()" class="flex-1 bg-red-500 hover:bg-red-600 py-2 rounded-xl transition">حذف</button>
+     </div>
+    </div>
+   </div>
+  </div>
+  <script>
+    // Questions Database
+    const questions = [
+      // True/False Questions (1-10)
+      { id: 1, type: 'tf', question: 'التسارع هو معدل التغير في السرعة المتجهة بالنسبة للزمن.', answer: true, explanation: 'صحيح، التسارع = التغير في السرعة ÷ الزمن' },
+      { id: 2, type: 'tf', question: 'عندما يكون التسارع صفراً، فإن الجسم يكون ساكناً حتماً.', answer: false, explanation: 'خطأ، قد يتحرك بسرعة ثابتة' },
+      { id: 3, type: 'tf', question: 'السقوط الحر هو حركة جسم تحت تأثير الجاذبية فقط.', answer: true, explanation: 'صحيح، بدون مقاومة الهواء' },
+      { id: 4, type: 'tf', question: 'تسارع الجاذبية الأرضية ثابت ويساوي 9.8 m/s² تقريباً.', answer: true, explanation: 'صحيح، عند سطح الأرض' },
+      { id: 5, type: 'tf', question: 'إذا كان التسارع سالباً، فإن الجسم يتباطأ دائماً.', answer: false, explanation: 'خطأ، يعتمد على اتجاه السرعة' },
+      { id: 6, type: 'tf', question: 'في الحركة المتسارعة بانتظام، يتغير التسارع مع الزمن.', answer: false, explanation: 'خطأ، التسارع ثابت' },
+      { id: 7, type: 'tf', question: 'المساحة تحت منحنى السرعة-الزمن تمثل الإزاحة.', answer: true, explanation: 'صحيح، الإزاحة = المساحة تحت المنحنى' },
+      { id: 8, type: 'tf', question: 'ميل منحنى الموقع-الزمن يمثل التسارع.', answer: false, explanation: 'خطأ، يمثل السرعة' },
+      { id: 9, type: 'tf', question: 'جسم يُقذف رأسياً للأعلى يكون تسارعه صفراً عند أقصى ارتفاع.', answer: false, explanation: 'خطأ، التسارع = g دائماً' },
+      { id: 10, type: 'tf', question: 'السرعة المتوسطة تساوي مجموع السرعتين الابتدائية والنهائية مقسوماً على 2.', answer: true, explanation: 'صحيح في الحركة المتسارعة بانتظام' },
+      
+      // Multiple Choice Questions (11-20)
+      { id: 11, type: 'mc', question: 'ما وحدة قياس التسارع في النظام الدولي؟', options: ['m/s', 'm/s²', 'km/h', 'N'], answer: 1, explanation: 'متر لكل ثانية مربعة' },
+      { id: 12, type: 'mc', question: 'سيارة تتسارع من السكون بمعدل 2 m/s²، كم تكون سرعتها بعد 5 ثوانٍ؟', options: ['5 m/s', '7 m/s', '10 m/s', '15 m/s'], answer: 2, explanation: 'v = at = 2×5 = 10 m/s' },
+      { id: 13, type: 'mc', question: 'أي من المعادلات التالية تربط بين الإزاحة والسرعة والتسارع؟', options: ['v = v₀ + at', 'x = v₀t + ½at²', 'v² = v₀² + 2ax', 'جميع ما سبق'], answer: 3, explanation: 'جميعها معادلات الحركة' },
+      { id: 14, type: 'mc', question: 'جسم يسقط سقوطاً حراً، كم تكون سرعته بعد ثانيتين؟', options: ['9.8 m/s', '19.6 m/s', '29.4 m/s', '4.9 m/s'], answer: 1, explanation: 'v = gt = 9.8×2 = 19.6 m/s' },
+      { id: 15, type: 'mc', question: 'ما المسافة التي يقطعها جسم ساقط سقوطاً حراً خلال ثانية واحدة؟', options: ['9.8 m', '4.9 m', '19.6 m', '2.45 m'], answer: 1, explanation: 'x = ½gt² = ½×9.8×1 = 4.9 m' },
+      { id: 16, type: 'mc', question: 'سيارة سرعتها 20 m/s توقفت خلال 4 ثوانٍ، ما تسارعها؟', options: ['-5 m/s²', '-4 m/s²', '5 m/s²', '80 m/s²'], answer: 0, explanation: 'a = Δv/t = -20/4 = -5 m/s²' },
+      { id: 17, type: 'mc', question: 'في الرسم البياني للسرعة-الزمن، الخط الأفقي يدل على:', options: ['سرعة متزايدة', 'سرعة ثابتة', 'تسارع ثابت', 'جسم ساكن'], answer: 1, explanation: 'الميل صفر = تسارع صفر' },
+      { id: 18, type: 'mc', question: 'جسم قُذف للأعلى بسرعة 30 m/s، ما أقصى ارتفاع يصله؟', options: ['45.9 m', '91.8 m', '30 m', '60 m'], answer: 0, explanation: 'h = v²/2g = 900/19.6 ≈ 45.9 m' },
+      { id: 19, type: 'mc', question: 'متى يكون التسارع والسرعة في نفس الاتجاه؟', options: ['عند التباطؤ', 'عند التسارع', 'عند السكون', 'دائماً'], answer: 1, explanation: 'عندما تزداد السرعة' },
+      { id: 20, type: 'mc', question: 'ما الذي يحدث لجسم تسارعه موجب وسرعته سالبة؟', options: ['يتسارع', 'يتباطأ', 'سرعته ثابتة', 'ساكن'], answer: 1, explanation: 'اتجاهان متعاكسان = تباطؤ' },
+      
+      // Problem Solving Questions (21-25)
+      { id: 21, type: 'problem', question: 'سيارة تتحرك بسرعة 10 m/s ثم تسارعت بمعدل 3 m/s² لمدة 4 ثوانٍ. احسب سرعتها النهائية.', options: ['22 m/s', '12 m/s', '40 m/s', '14 m/s'], answer: 0, solution: 'الحل: v = v₀ + at\nv = 10 + (3)(4)\nv = 10 + 12 = 22 m/s' },
+      { id: 22, type: 'problem', question: 'جسم يسقط من ارتفاع 80 m. كم يستغرق للوصول للأرض؟ (g = 10 m/s²)', options: ['4 s', '8 s', '2 s', '16 s'], answer: 0, solution: 'الحل: x = ½gt²\n80 = ½(10)t²\nt² = 16\nt = 4 s' },
+      { id: 23, type: 'problem', question: 'قطار يتحرك بسرعة 30 m/s استخدم الفرامل وتوقف بعد قطع 90 m. احسب تسارعه.', options: ['-5 m/s²', '-10 m/s²', '5 m/s²', '-3 m/s²'], answer: 0, solution: 'الحل: v² = v₀² + 2ax\n0 = 900 + 2a(90)\na = -900/180 = -5 m/s²' },
+      { id: 24, type: 'problem', question: 'كرة قُذفت للأعلى بسرعة 20 m/s. كم تستغرق للوصول لأقصى ارتفاع؟ (g = 10 m/s²)', options: ['2 s', '4 s', '1 s', '0.5 s'], answer: 0, solution: 'الحل: v = v₀ - gt\n0 = 20 - 10t\nt = 2 s' },
+      { id: 25, type: 'problem', question: 'سيارة من السكون تسارعت 4 m/s² لمدة 5 s. احسب المسافة المقطوعة.', options: ['50 m', '100 m', '20 m', '25 m'], answer: 0, solution: 'الحل: x = v₀t + ½at²\nx = 0 + ½(4)(25)\nx = 50 m' }
+    ];
+
+    // State
+    let currentStudent = '';
+    let currentQuestion = 0;
+    let userAnswers = new Array(25).fill(null);
+    let studentsData = [];
+    let deleteTargetId = null;
+    let isSubmitting = false;
+
+    const defaultConfig = {
+      quiz_title: 'اختبار الفيزياء - الحركة المتسارعة'
+    };
+
+    // Data Handler
+    const dataHandler = {
+      onDataChanged(data) {
+        studentsData = data;
+        if (document.getElementById('adminPanel').classList.contains('hidden') === false) {
+          renderStudentsTable();
+        }
+      }
+    };
+
+    // Initialize
+    async function init() {
+      if (window.dataSdk) {
+        await window.dataSdk.init(dataHandler);
+      }
+      
+      if (window.elementSdk) {
+        window.elementSdk.init({
+          defaultConfig,
+          onConfigChange: async (config) => {
+            const title = config.quiz_title || defaultConfig.quiz_title;
+            const mainTitle = document.getElementById('mainTitle');
+            if (mainTitle) mainTitle.textContent = title;
+          },
+          mapToCapabilities: () => ({
+            recolorables: [],
+            borderables: [],
+            fontEditable: undefined,
+            fontSizeable: undefined
+          }),
+          mapToEditPanelValues: (config) => new Map([
+            ['quiz_title', config.quiz_title || defaultConfig.quiz_title]
+          ])
+        });
+      }
+    }
+
+    init();
+
+    // Login Functions
+    function handleLogin() {
+      const name = document.getElementById('studentName').value.trim();
+      const password = document.getElementById('studentPassword').value;
+      const errorDiv = document.getElementById('loginError');
+      
+      if (!name) {
+        errorDiv.textContent = 'الرجاء إدخال اسمك';
+        errorDiv.classList.remove('hidden');
+        return;
+      }
+      
+      if (password !== '2010') {
+        errorDiv.textContent = 'كلمة المرور غير صحيحة';
+        errorDiv.classList.remove('hidden');
+        return;
+      }
+      
+      currentStudent = name;
+      errorDiv.classList.add('hidden');
+      document.getElementById('loginPage').classList.add('hidden');
+      document.getElementById('quizPage').classList.remove('hidden');
+      document.getElementById('displayStudentName').textContent = name;
+      currentQuestion = 0;
+      userAnswers = new Array(25).fill(null);
+      renderQuestion();
+    }
+
+    function showAdminLogin() {
+      document.getElementById('loginPage').classList.add('hidden');
+      document.getElementById('adminLoginPage').classList.remove('hidden');
+    }
+
+    function backToLogin() {
+      document.getElementById('adminLoginPage').classList.add('hidden');
+      document.getElementById('loginPage').classList.remove('hidden');
+    }
+
+    function handleAdminLogin() {
+      const username = document.getElementById('adminUsername').value;
+      const password = document.getElementById('adminPassword').value;
+      const errorDiv = document.getElementById('adminLoginError');
+      
+      if (username === 'Hozan' && password === '2010') {
+        errorDiv.classList.add('hidden');
+        document.getElementById('adminLoginPage').classList.add('hidden');
+        document.getElementById('adminPanel').classList.remove('hidden');
+        renderStudentsTable();
+      } else {
+        errorDiv.textContent = 'اسم المستخدم أو كلمة المرور غير صحيحة';
+        errorDiv.classList.remove('hidden');
+      }
+    }
+
+    function logoutAdmin() {
+      document.getElementById('adminPanel').classList.add('hidden');
+      document.getElementById('loginPage').classList.remove('hidden');
+      document.getElementById('adminUsername').value = '';
+      document.getElementById('adminPassword').value = '';
+    }
+
+    // Quiz Functions
+    function renderQuestion() {
+      const q = questions[currentQuestion];
+      const typeLabels = { tf: 'صح أو خطأ', mc: 'اختيار من متعدد', problem: 'مسألة حسابية' };
+      
+      document.getElementById('questionType').textContent = typeLabels[q.type];
+      document.getElementById('questionText').textContent = `${currentQuestion + 1}. ${q.question}`;
+      document.getElementById('questionNumber').textContent = currentQuestion + 1;
+      document.getElementById('progressBar').style.width = `${((currentQuestion + 1) / 25) * 100}%`;
+      
+      const container = document.getElementById('optionsContainer');
+      container.innerHTML = '';
+      
+      if (q.type === 'tf') {
+        const options = ['صح ✓', 'خطأ ✗'];
+        options.forEach((opt, i) => {
+          const btn = document.createElement('button');
+          btn.className = `option-btn w-full text-right p-4 rounded-xl border border-white/20 ${userAnswers[currentQuestion] === (i === 0) ? 'selected' : ''}`;
+          btn.textContent = opt;
+          btn.onclick = () => selectAnswer(i === 0);
+          container.appendChild(btn);
+        });
+      } else {
+        q.options.forEach((opt, i) => {
+          const btn = document.createElement('button');
+          btn.className = `option-btn w-full text-right p-4 rounded-xl border border-white/20 ${userAnswers[currentQuestion] === i ? 'selected' : ''}`;
+          btn.innerHTML = `<span class="inline-block w-8 h-8 rounded-full bg-white/10 text-center leading-8 ml-3">${['أ', 'ب', 'ج', 'د'][i]}</span>${opt}`;
+          btn.onclick = () => selectAnswer(i);
+          container.appendChild(btn);
+        });
+      }
+      
+      const solutionDiv = document.getElementById('problemSolution');
+      if (q.type === 'problem') {
+        document.getElementById('solutionText').textContent = q.solution;
+        solutionDiv.classList.remove('hidden');
+      } else {
+        solutionDiv.classList.add('hidden');
+      }
+      
+      // Update navigation
+      document.getElementById('prevBtn').disabled = currentQuestion === 0;
+      
+      if (currentQuestion === 24) {
+        document.getElementById('nextBtn').classList.add('hidden');
+        document.getElementById('submitBtn').classList.remove('hidden');
+      } else {
+        document.getElementById('nextBtn').classList.remove('hidden');
+        document.getElementById('submitBtn').classList.add('hidden');
+      }
+    }
+
+    function selectAnswer(answer) {
+      userAnswers[currentQuestion] = answer;
+      renderQuestion();
+    }
+
+    function nextQuestion() {
+      if (currentQuestion < 24) {
+        currentQuestion++;
+        renderQuestion();
+      }
+    }
+
+    function prevQuestion() {
+      if (currentQuestion > 0) {
+        currentQuestion--;
+        renderQuestion();
+      }
+    }
+
+    async function submitQuiz() {
+      if (isSubmitting) return;
+      
+      if (studentsData.length >= 999) {
+        showToast('تم الوصول للحد الأقصى من النتائج المحفوظة', 'error');
+        return;
+      }
+      
+      isSubmitting = true;
+      document.getElementById('submitBtn').disabled = true;
+      document.getElementById('submitBtn').textContent = 'جاري الحفظ...';
+      
+      let score = 0;
+      questions.forEach((q, i) => {
+        if (q.type === 'tf') {
+          if (userAnswers[i] === q.answer) score++;
+        } else {
+          if (userAnswers[i] === q.answer) score++;
+        }
+      });
+      
+      const percentage = Math.round((score / 25) * 100);
+      
+      if (window.dataSdk) {
+        const result = await window.dataSdk.create({
+          student_name: currentStudent,
+          score: score,
+          total_questions: 25,
+          percentage: percentage,
+          completed_at: new Date().toISOString()
+        });
+        
+        if (!result.isOk) {
+          showToast('حدث خطأ في حفظ النتيجة', 'error');
+        }
+      }
+      
+      isSubmitting = false;
+      document.getElementById('submitBtn').disabled = false;
+      document.getElementById('submitBtn').textContent = 'إرسال الإجابات ✓';
+      
+      showResults(score, percentage);
+    }
+
+    function showResults(score, percentage) {
+      document.getElementById('quizPage').classList.add('hidden');
+      document.getElementById('resultsPage').classList.remove('hidden');
+      
+      document.getElementById('resultStudentName').textContent = currentStudent;
+      document.getElementById('scoreDisplay').textContent = `${score}/25`;
+      document.getElementById('percentageDisplay').textContent = `${percentage}%`;
+      
+      const iconDiv = document.getElementById('resultIcon');
+      const messageDiv = document.getElementById('resultMessage');
+      
+      if (percentage >= 90) {
+        iconDiv.className = 'w-24 h-24 mx-auto mb-6 rounded-full flex items-center justify-center text-5xl bg-gradient-to-br from-yellow-400 to-amber-500';
+        iconDiv.textContent = '🏆';
+        messageDiv.innerHTML = '<span class="text-yellow-400">ممتاز!</span> أداء رائع ومتميز';
+      } else if (percentage >= 70) {
+        iconDiv.className = 'w-24 h-24 mx-auto mb-6 rounded-full flex items-center justify-center text-5xl bg-gradient-to-br from-green-400 to-emerald-500';
+        iconDiv.textContent = '⭐';
+        messageDiv.innerHTML = '<span class="text-green-400">جيد جداً!</span> استمر في التقدم';
+      } else if (percentage >= 50) {
+        iconDiv.className = 'w-24 h-24 mx-auto mb-6 rounded-full flex items-center justify-center text-5xl bg-gradient-to-br from-blue-400 to-cyan-500';
+        iconDiv.textContent = '📚';
+        messageDiv.innerHTML = '<span class="text-blue-400">مقبول</span> تحتاج لمزيد من المراجعة';
+      } else {
+        iconDiv.className = 'w-24 h-24 mx-auto mb-6 rounded-full flex items-center justify-center text-5xl bg-gradient-to-br from-red-400 to-rose-500';
+        iconDiv.textContent = '📖';
+        messageDiv.innerHTML = '<span class="text-red-400">تحتاج تحسين</span> راجع الفصل مرة أخرى';
+      }
+    }
+
+    function restartQuiz() {
+      document.getElementById('resultsPage').classList.add('hidden');
+      document.getElementById('loginPage').classList.remove('hidden');
+      document.getElementById('studentName').value = '';
+      document.getElementById('studentPassword').value = '';
+      currentStudent = '';
+      currentQuestion = 0;
+      userAnswers = new Array(25).fill(null);
+    }
+
+    // Admin Functions
+    function renderStudentsTable() {
+      const tbody = document.getElementById('studentsBody');
+      const noStudents = document.getElementById('noStudents');
+      const totalSpan = document.getElementById('totalStudents');
+      
+      totalSpan.textContent = `${studentsData.length} طالب`;
+      
+      if (studentsData.length === 0) {
+        tbody.innerHTML = '';
+        noStudents.classList.remove('hidden');
+        return;
+      }
+      
+      noStudents.classList.add('hidden');
+      
+      const sortedData = [...studentsData].sort((a, b) => 
+        new Date(b.completed_at) - new Date(a.completed_at)
+      );
+      
+      tbody.innerHTML = sortedData.map((student, index) => {
+        const date = new Date(student.completed_at);
+        const dateStr = date.toLocaleDateString('ar-SA');
+        const gradeClass = student.percentage >= 70 ? 'text-green-400' : student.percentage >= 50 ? 'text-yellow-400' : 'text-red-400';
+        
+        return `
+          <tr class="border-b border-white/5 hover:bg-white/5 transition">
+            <td class="py-3 px-4 text-gray-400">${index + 1}</td>
+            <td class="py-3 px-4 font-medium">${student.student_name}</td>
+            <td class="py-3 px-4">${student.score}/${student.total_questions}</td>
+            <td class="py-3 px-4 ${gradeClass} font-bold">${student.percentage}%</td>
+            <td class="py-3 px-4 text-gray-400 text-sm">${dateStr}</td>
+            <td class="py-3 px-4">
+              <button onclick="showDeleteConfirm('${student.__backendId}')" class="text-red-400 hover:text-red-300 transition text-sm">
+                حذف
+              </button>
+            </td>
+          </tr>
+        `;
+      }).join('');
+    }
+
+    function showDeleteConfirm(id) {
+      deleteTargetId = id;
+      document.getElementById('deleteModal').classList.remove('hidden');
+    }
+
+    function cancelDelete() {
+      deleteTargetId = null;
+      document.getElementById('deleteModal').classList.add('hidden');
+    }
+
+    async function confirmDelete() {
+      if (!deleteTargetId || !window.dataSdk) return;
+      
+      const student = studentsData.find(s => s.__backendId === deleteTargetId);
+      if (student) {
+        const result = await window.dataSdk.delete(student);
+        if (!result.isOk) {
+          showToast('حدث خطأ في الحذف', 'error');
+        }
+      }
+      
+      deleteTargetId = null;
+      document.getElementById('deleteModal').classList.add('hidden');
+    }
+
+    function showToast(message, type = 'info') {
+      const toast = document.createElement('div');
+      toast.className = `fixed bottom-4 left-1/2 transform -translate-x-1/2 px-6 py-3 rounded-xl ${type === 'error' ? 'bg-red-500' : 'bg-green-500'} text-white font-medium z-50 animate-fade`;
+      toast.textContent = message;
+      document.body.appendChild(toast);
+      setTimeout(() => toast.remove(), 3000);
+    }
+  </script>
+ <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9d477ac641cf2cff',t:'MTc3MjE5MzE4NC4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>
