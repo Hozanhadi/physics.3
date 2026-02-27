@@ -3,7 +3,709 @@
  <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>اختبار الفيزياء - الحركة المتسارعة</title><!doctype html>
+<html lang="ar" dir="rtl" class="h-full">
+ <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>اختبار الفيزياء - الحركة المتسارعة</title>
+  <script src="https://cdn.tailwindcss.com/3.4.17"></script>
+  <script src="/_sdk/element_sdk.js"></script>
+  <script src="/_sdk/data_sdk.js"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800&amp;display=swap" rel="stylesheet">
+  <style>
+    * { font-family: 'Tajawal', sans-serif; }
+    .gradient-bg { background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%); }
+    .card-glass { background: rgba(255,255,255,0.05); backdrop-filter: blur(10px); border: 1px solid rgba(255,255,255,0.1); }
+    .btn-primary { background: linear-gradient(135deg, #e94560 0%, #ff6b6b 100%); }
+    .btn-primary:hover { background: linear-gradient(135deg, #ff6b6b 0%, #e94560 100%); transform: translateY(-2px); }
+    .correct-answer { background: linear-gradient(135deg, #00b894 0%, #00cec9 100%); }
+    .wrong-answer { background: linear-gradient(135deg, #d63031 0%, #e17055 100%); }
+    .option-btn { transition: all 0.3s ease; }
+    .option-btn:hover:not(:disabled) { transform: translateX(-5px); background: rgba(233,69,96,0.2); }
+    .selected-option { background: rgba(233,69,96,0.3); border-color: #e94560; }
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+    @keyframes pulse { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.05); } }
+    .animate-fade { animation: fadeIn 0.5s ease forwards; }
+    .animate-pulse-custom { animation: pulse 2s infinite; }
+    .progress-bar { transition: width 0.5s ease; }
+    .scrollbar-thin::-webkit-scrollbar { width: 6px; }
+    .scrollbar-thin::-webkit-scrollbar-track { background: rgba(255,255,255,0.1); border-radius: 3px; }
+    .scrollbar-thin::-webkit-scrollbar-thumb { background: #e94560; border-radius: 3px; }
+  </style>
+  <style>body { box-sizing: border-box; }</style>
+ </head>
+ <body class="h-full gradient-bg text-white overflow-auto"><!-- Login Screen -->
+  <div id="loginScreen" class="min-h-full flex items-center justify-center p-4">
+   <div class="card-glass rounded-3xl p-8 w-full max-w-md animate-fade">
+    <div class="text-center mb-8">
+     <div class="w-24 h-24 mx-auto mb-4 rounded-full bg-gradient-to-br from-pink-500 to-red-500 flex items-center justify-center animate-pulse-custom">
+      <svg class="w-12 h-12" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"></path>
+      </svg>
+     </div>
+     <h1 id="mainTitle" class="text-3xl font-bold mb-2">اختبار الفيزياء</h1>
+     <p class="text-gray-400">الفصل الثالث: الحركة المتسارعة</p>
+    </div>
+    <div class="space-y-4">
+     <div><label class="block text-sm text-gray-300 mb-2">اسم الطالب</label> <input type="text" id="studentName" placeholder="أدخل اسمك الكامل" class="w-full px-4 py-3 rounded-xl bg-white/10 border border-white/20 focus:border-pink-500 focus:outline-none transition">
+     </div>
+     <div><label class="block text-sm text-gray-300 mb-2">كلمة المرور</label> <input type="password" id="studentPassword" placeholder="أدخل كلمة المرور" class="w-full px-4 py-3 rounded-xl bg-white/10 border border-white/20 focus:border-pink-500 focus:outline-none transition">
+     </div>
+     <p id="loginError" class="text-red-400 text-sm hidden">كلمة المرور غير صحيحة! كلمة المرور هي: 2010</p><button onclick="login()" class="w-full btn-primary text-white font-bold py-4 rounded-xl transition shadow-lg shadow-pink-500/30"> دخول الاختبار </button> <button onclick="showAdminLogin()" class="w-full text-gray-400 hover:text-white py-2 text-sm transition"> دخول المدير </button>
+    </div>
+   </div>
+  </div><!-- Admin Login Screen -->
+  <div id="adminLoginScreen" class="min-h-full hidden items-center justify-center p-4">
+   <div class="card-glass rounded-3xl p-8 w-full max-w-md animate-fade">
+    <div class="text-center mb-8">
+     <div class="w-24 h-24 mx-auto mb-4 rounded-full bg-gradient-to-br from-purple-500 to-indigo-500 flex items-center justify-center">
+      <svg class="w-12 h-12" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5.121 17.804A13.937 13.937 0 0112 16c2.5 0 4.847.655 6.879 1.804M15 10a3 3 0 11-6 0 3 3 0 016 0zm6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+      </svg>
+     </div>
+     <h1 class="text-3xl font-bold mb-2">لوحة المدير</h1>
+     <p class="text-gray-400">تسجيل دخول المدير</p>
+    </div>
+    <div class="space-y-4">
+     <div><label class="block text-sm text-gray-300 mb-2">اسم المستخدم</label> <input type="text" id="adminName" placeholder="أدخل اسم المستخدم" class="w-full px-4 py-3 rounded-xl bg-white/10 border border-white/20 focus:border-purple-500 focus:outline-none transition">
+     </div>
+     <div><label class="block text-sm text-gray-300 mb-2">كلمة المرور</label> <input type="password" id="adminPassword" placeholder="أدخل كلمة المرور" class="w-full px-4 py-3 rounded-xl bg-white/10 border border-white/20 focus:border-purple-500 focus:outline-none transition">
+     </div>
+     <p id="adminError" class="text-red-400 text-sm hidden">بيانات الدخول غير صحيحة!</p><button onclick="adminLogin()" class="w-full bg-gradient-to-r from-purple-500 to-indigo-500 hover:from-purple-600 hover:to-indigo-600 text-white font-bold py-4 rounded-xl transition shadow-lg shadow-purple-500/30"> دخول </button> <button onclick="backToLogin()" class="w-full text-gray-400 hover:text-white py-2 text-sm transition"> العودة لصفحة الدخول </button>
+    </div>
+   </div>
+  </div><!-- Admin Panel -->
+  <div id="adminPanel" class="min-h-full hidden p-4">
+   <div class="max-w-4xl mx-auto">
+    <div class="card-glass rounded-3xl p-6 mb-6 animate-fade">
+     <div class="flex items-center justify-between mb-6">
+      <div class="flex items-center gap-4">
+       <div class="w-12 h-12 rounded-full bg-gradient-to-br from-purple-500 to-indigo-500 flex items-center justify-center">
+        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5.121 17.804A13.937 13.937 0 0112 16c2.5 0 4.847.655 6.879 1.804M15 10a3 3 0 11-6 0 3 3 0 016 0zm6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+        </svg>
+       </div>
+       <div>
+        <h1 class="text-2xl font-bold">لوحة تحكم المدير</h1>
+        <p class="text-gray-400">مرحباً Hozan</p>
+       </div>
+      </div><button onclick="adminLogout()" class="px-4 py-2 rounded-lg bg-red-500/20 text-red-400 hover:bg-red-500/30 transition"> تسجيل خروج </button>
+     </div>
+     <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+      <div class="bg-gradient-to-br from-pink-500/20 to-red-500/20 rounded-2xl p-4 border border-pink-500/20">
+       <p class="text-gray-400 text-sm">إجمالي الطلاب</p>
+       <p id="totalStudents" class="text-3xl font-bold text-pink-400">0</p>
+      </div>
+      <div class="bg-gradient-to-br from-green-500/20 to-teal-500/20 rounded-2xl p-4 border border-green-500/20">
+       <p class="text-gray-400 text-sm">متوسط الدرجات</p>
+       <p id="avgScore" class="text-3xl font-bold text-green-400">0%</p>
+      </div>
+      <div class="bg-gradient-to-br from-blue-500/20 to-indigo-500/20 rounded-2xl p-4 border border-blue-500/20">
+       <p class="text-gray-400 text-sm">أعلى درجة</p>
+       <p id="highestScore" class="text-3xl font-bold text-blue-400">0%</p>
+      </div>
+     </div>
+    </div>
+    <div class="card-glass rounded-3xl p-6 animate-fade">
+     <h2 class="text-xl font-bold mb-4 flex items-center gap-2">
+      <svg class="w-6 h-6 text-pink-500" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"></path>
+      </svg> سجل نتائج الطلاب</h2>
+     <div id="studentsTable" class="overflow-x-auto">
+      <table class="w-full">
+       <thead>
+        <tr class="border-b border-white/10">
+         <th class="text-right py-3 px-4 text-gray-400 font-medium">#</th>
+         <th class="text-right py-3 px-4 text-gray-400 font-medium">اسم الطالب</th>
+         <th class="text-right py-3 px-4 text-gray-400 font-medium">الدرجة</th>
+         <th class="text-right py-3 px-4 text-gray-400 font-medium">النسبة</th>
+         <th class="text-right py-3 px-4 text-gray-400 font-medium">التاريخ</th>
+        </tr>
+       </thead>
+       <tbody id="studentsList">
+        <tr>
+         <td colspan="5" class="text-center py-8 text-gray-500">لا يوجد طلاب بعد</td>
+        </tr>
+       </tbody>
+      </table>
+     </div>
+    </div>
+   </div>
+  </div><!-- Quiz Screen -->
+  <div id="quizScreen" class="min-h-full hidden p-4">
+   <div class="max-w-3xl mx-auto"><!-- Header -->
+    <div class="card-glass rounded-2xl p-4 mb-4 animate-fade">
+     <div class="flex items-center justify-between mb-3">
+      <div class="flex items-center gap-3">
+       <div class="w-10 h-10 rounded-full bg-gradient-to-br from-pink-500 to-red-500 flex items-center justify-center text-sm font-bold"><span id="currentQ">1</span>
+       </div>
+       <div>
+        <p class="text-sm text-gray-400">السؤال</p>
+        <p class="font-bold"><span id="currentQNum">1</span> من <span id="totalQ">25</span></p>
+       </div>
+      </div>
+      <div class="text-left">
+       <p class="text-sm text-gray-400">الطالب</p>
+       <p id="displayName" class="font-bold text-pink-400">-</p>
+      </div>
+     </div>
+     <div class="h-2 bg-white/10 rounded-full overflow-hidden">
+      <div id="progressBar" class="progress-bar h-full bg-gradient-to-r from-pink-500 to-red-500 rounded-full" style="width: 4%"></div>
+     </div>
+    </div><!-- Question Card -->
+    <div id="questionCard" class="card-glass rounded-3xl p-6 mb-4 animate-fade">
+     <div id="questionType" class="inline-block px-3 py-1 rounded-full text-xs font-bold mb-4 bg-pink-500/20 text-pink-400">
+      صح أو خطأ
+     </div>
+     <h2 id="questionText" class="text-xl font-bold mb-6 leading-relaxed">السؤال يظهر هنا</h2>
+     <div id="optionsContainer" class="space-y-3"><!-- Options will be inserted here -->
+     </div>
+     <div id="answerFeedback" class="hidden mt-6 p-4 rounded-xl">
+      <p id="feedbackText" class="font-bold"></p>
+      <p id="explanationText" class="text-sm mt-2 opacity-80"></p>
+     </div>
+    </div><!-- Navigation -->
+    <div class="flex gap-4"><button id="nextBtn" onclick="nextQuestion()" disabled class="flex-1 btn-primary text-white font-bold py-4 rounded-xl transition shadow-lg shadow-pink-500/30 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none"> السؤال التالي </button>
+    </div>
+   </div>
+  </div><!-- Results Screen -->
+  <div id="resultsScreen" class="min-h-full hidden items-center justify-center p-4">
+   <div class="card-glass rounded-3xl p-8 w-full max-w-lg text-center animate-fade">
+    <div id="resultIcon" class="w-32 h-32 mx-auto mb-6 rounded-full flex items-center justify-center">
+     <svg class="w-16 h-16" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+     </svg>
+    </div>
+    <h1 class="text-3xl font-bold mb-2">انتهى الاختبار!</h1>
+    <p id="resultName" class="text-gray-400 mb-6">أحسنت يا طالب</p>
+    <div class="bg-white/5 rounded-2xl p-6 mb-6">
+     <p class="text-6xl font-bold mb-2" id="finalScore">0%</p>
+     <p class="text-gray-400">درجتك النهائية</p>
+     <div class="flex justify-center gap-8 mt-4 pt-4 border-t border-white/10">
+      <div>
+       <p id="correctCount" class="text-2xl font-bold text-green-400">0</p>
+       <p class="text-sm text-gray-400">صحيح</p>
+      </div>
+      <div>
+       <p id="wrongCount" class="text-2xl font-bold text-red-400">0</p>
+       <p class="text-sm text-gray-400">خطأ</p>
+      </div>
+     </div>
+    </div>
+    <p id="resultMessage" class="text-lg mb-6">رسالة التقييم</p><button onclick="restartQuiz()" class="w-full btn-primary text-white font-bold py-4 rounded-xl transition shadow-lg shadow-pink-500/30"> إعادة الاختبار </button>
+   </div>
+  </div>
+  <script>
+    // Configuration
+    const defaultConfig = {
+      quiz_title: 'اختبار الفيزياء - الحركة المتسارعة',
+      background_color: '#1a1a2e',
+      primary_color: '#e94560',
+      text_color: '#ffffff',
+      secondary_color: '#16213e',
+      accent_color: '#ff6b6b'
+    };
+
+    let config = { ...defaultConfig };
+    let studentsData = [];
+    let currentStudent = '';
+    let currentQuestion = 0;
+    let score = 0;
+    let answered = false;
+
+    // Questions Database
+    const questions = [
+      // True/False Questions (10)
+      {
+        type: 'صح أو خطأ',
+        question: 'التسارع هو معدل تغير السرعة المتجهة بالنسبة للزمن.',
+        options: ['صح', 'خطأ'],
+        correct: 0,
+        explanation: 'التسارع يُعرّف بأنه معدل تغير السرعة المتجهة بالنسبة للزمن: a = Δv/Δt'
+      },
+      {
+        type: 'صح أو خطأ',
+        question: 'عندما يكون التسارع والسرعة في نفس الاتجاه، فإن الجسم يتباطأ.',
+        options: ['صح', 'خطأ'],
+        correct: 1,
+        explanation: 'عندما يكون التسارع والسرعة في نفس الاتجاه، فإن الجسم يتسارع (تزداد سرعته). أما إذا كانا في اتجاهين متعاكسين فإنه يتباطأ.'
+      },
+      {
+        type: 'صح أو خطأ',
+        question: 'تسارع الجاذبية الأرضية ثابت ويساوي تقريباً 9.8 m/s².',
+        options: ['صح', 'خطأ'],
+        correct: 0,
+        explanation: 'تسارع الجاذبية الأرضية (g) ثابت تقريباً عند سطح الأرض ويساوي 9.8 m/s² أو يُقرّب إلى 10 m/s².'
+      },
+      {
+        type: 'صح أو خطأ',
+        question: 'في السقوط الحر، تزداد سرعة الجسم الساقط بمقدار 9.8 m/s كل ثانية.',
+        options: ['صح', 'خطأ'],
+        correct: 0,
+        explanation: 'في السقوط الحر، يكتسب الجسم سرعة إضافية قدرها 9.8 m/s كل ثانية بسبب تسارع الجاذبية.'
+      },
+      {
+        type: 'صح أو خطأ',
+        question: 'وحدة قياس التسارع في النظام الدولي هي m/s.',
+        options: ['صح', 'خطأ'],
+        correct: 1,
+        explanation: 'وحدة قياس التسارع في النظام الدولي هي m/s² (متر لكل ثانية تربيع) وليس m/s.'
+      },
+      {
+        type: 'صح أو خطأ',
+        question: 'يمكن أن يكون التسارع سالباً حتى لو كان الجسم يتحرك في الاتجاه الموجب.',
+        options: ['صح', 'خطأ'],
+        correct: 0,
+        explanation: 'نعم، التسارع السالب يعني أن الجسم يتباطأ إذا كان يتحرك في الاتجاه الموجب.'
+      },
+      {
+        type: 'صح أو خطأ',
+        question: 'في الحركة المتسارعة بانتظام، يكون التسارع متغيراً.',
+        options: ['صح', 'خطأ'],
+        correct: 1,
+        explanation: 'في الحركة المتسارعة بانتظام، يكون التسارع ثابتاً وليس متغيراً.'
+      },
+      {
+        type: 'صح أو خطأ',
+        question: 'عند رمي جسم رأسياً للأعلى، يكون تسارعه صفراً عند أعلى نقطة.',
+        options: ['صح', 'خطأ'],
+        correct: 1,
+        explanation: 'التسارع يبقى ثابتاً (g = 9.8 m/s²) طوال الحركة، حتى عند أعلى نقطة حيث تكون السرعة صفراً فقط.'
+      },
+      {
+        type: 'صح أو خطأ',
+        question: 'الجسمان المختلفان في الكتلة يسقطان بنفس التسارع في الفراغ.',
+        options: ['صح', 'خطأ'],
+        correct: 0,
+        explanation: 'في الفراغ (بدون مقاومة الهواء)، جميع الأجسام تسقط بنفس التسارع g بغض النظر عن كتلتها.'
+      },
+      {
+        type: 'صح أو خطأ',
+        question: 'السرعة المتوسطة في الحركة المتسارعة بانتظام تساوي متوسط السرعة الابتدائية والنهائية.',
+        options: ['صح', 'خطأ'],
+        correct: 0,
+        explanation: 'السرعة المتوسطة = (v₀ + v) / 2 في الحركة المتسارعة بانتظام.'
+      },
+      
+      // Multiple Choice Questions (10)
+      {
+        type: 'اختيار من متعدد',
+        question: 'سيارة تتحرك بسرعة 20 m/s ثم تتسارع بمعدل 4 m/s² لمدة 5 ثوانٍ. ما سرعتها النهائية؟',
+        options: ['30 m/s', '40 m/s', '60 m/s', '100 m/s'],
+        correct: 1,
+        explanation: 'v = v₀ + at = 20 + (4 × 5) = 20 + 20 = 40 m/s'
+      },
+      {
+        type: 'اختيار من متعدد',
+        question: 'ما المعادلة الصحيحة للإزاحة في الحركة المتسارعة بانتظام؟',
+        options: ['d = vt', 'd = v₀t + ½at²', 'd = at²', 'd = v²/2a'],
+        correct: 1,
+        explanation: 'المعادلة الصحيحة للإزاحة هي: d = v₀t + ½at²'
+      },
+      {
+        type: 'اختيار من متعدد',
+        question: 'جسم يسقط سقوطاً حراً من السكون. ما سرعته بعد 3 ثوانٍ؟ (g = 10 m/s²)',
+        options: ['10 m/s', '20 m/s', '30 m/s', '45 m/s'],
+        correct: 2,
+        explanation: 'v = v₀ + gt = 0 + (10 × 3) = 30 m/s'
+      },
+      {
+        type: 'اختيار من متعدد',
+        question: 'إذا تضاعف الزمن في السقوط الحر، فإن المسافة المقطوعة:',
+        options: ['تتضاعف', 'تتربع', 'تبقى ثابتة', 'تنقص للنصف'],
+        correct: 1,
+        explanation: 'd = ½gt²، عند مضاعفة الزمن: d = ½g(2t)² = ½g(4t²) = 4(½gt²)، أي تتربع.'
+      },
+      {
+        type: 'اختيار من متعدد',
+        question: 'ما الكمية التي تبقى ثابتة أثناء السقوط الحر؟',
+        options: ['السرعة', 'التسارع', 'الإزاحة', 'الزمن'],
+        correct: 1,
+        explanation: 'التسارع (تسارع الجاذبية g) يبقى ثابتاً طوال السقوط الحر.'
+      },
+      {
+        type: 'اختيار من متعدد',
+        question: 'سيارة تتباطأ من 30 m/s إلى 10 m/s خلال 4 ثوانٍ. ما تسارعها؟',
+        options: ['-5 m/s²', '5 m/s²', '-10 m/s²', '10 m/s²'],
+        correct: 0,
+        explanation: 'a = (v - v₀)/t = (10 - 30)/4 = -20/4 = -5 m/s² (سالب لأنها تتباطأ)'
+      },
+      {
+        type: 'اختيار من متعدد',
+        question: 'ما العلاقة بين الإزاحة والزمن في الحركة المتسارعة بانتظام من السكون؟',
+        options: ['خطية', 'تربيعية', 'عكسية', 'ثابتة'],
+        correct: 1,
+        explanation: 'd = ½at²، العلاقة تربيعية حيث الإزاحة تتناسب طردياً مع مربع الزمن.'
+      },
+      {
+        type: 'اختيار من متعدد',
+        question: 'جسم رُمي رأسياً للأعلى بسرعة 40 m/s. ما الزمن اللازم للوصول لأقصى ارتفاع؟ (g = 10 m/s²)',
+        options: ['2 s', '4 s', '8 s', '10 s'],
+        correct: 1,
+        explanation: 'عند أقصى ارتفاع v = 0، إذاً: t = v₀/g = 40/10 = 4 s'
+      },
+      {
+        type: 'اختيار من متعدد',
+        question: 'ميل منحنى (السرعة - الزمن) يمثل:',
+        options: ['الإزاحة', 'السرعة المتوسطة', 'التسارع', 'المسافة'],
+        correct: 2,
+        explanation: 'ميل منحنى السرعة-الزمن = Δv/Δt = التسارع'
+      },
+      {
+        type: 'اختيار من متعدد',
+        question: 'المساحة تحت منحنى (السرعة - الزمن) تمثل:',
+        options: ['التسارع', 'السرعة', 'الإزاحة', 'القوة'],
+        correct: 2,
+        explanation: 'المساحة تحت منحنى السرعة-الزمن تمثل الإزاحة.'
+      },
+      
+      // Problem Solving Questions (5)
+      {
+        type: 'مسألة حسابية',
+        question: 'سيارة تبدأ من السكون وتتسارع بمعدل 5 m/s² لمدة 6 ثوانٍ. احسب المسافة التي قطعتها.',
+        options: ['45 m', '90 m', '180 m', '30 m'],
+        correct: 1,
+        explanation: 'd = v₀t + ½at² = 0 + ½(5)(6²) = ½(5)(36) = 90 m'
+      },
+      {
+        type: 'مسألة حسابية',
+        question: 'أُسقط حجر من ارتفاع 80 m. كم يستغرق ليصل الأرض؟ (g = 10 m/s²)',
+        options: ['2 s', '4 s', '8 s', '16 s'],
+        correct: 1,
+        explanation: 'd = ½gt²، إذاً 80 = ½(10)t²، t² = 16، t = 4 s'
+      },
+      {
+        type: 'مسألة حسابية',
+        question: 'طائرة تسير بسرعة 100 m/s ثم تهبط مستخدمة تسارع -4 m/s². ما المسافة اللازمة للتوقف؟',
+        options: ['1250 m', '625 m', '2500 m', '500 m'],
+        correct: 0,
+        explanation: 'v² = v₀² + 2ad، 0 = 10000 + 2(-4)d، d = 10000/8 = 1250 m'
+      },
+      {
+        type: 'مسألة حسابية',
+        question: 'كرة رُميت رأسياً للأعلى بسرعة 25 m/s. ما أقصى ارتفاع تصله؟ (g = 10 m/s²)',
+        options: ['31.25 m', '62.5 m', '125 m', '25 m'],
+        correct: 0,
+        explanation: 'v² = v₀² - 2gh، 0 = 625 - 20h، h = 625/20 = 31.25 m'
+      },
+      {
+        type: 'مسألة حسابية',
+        question: 'قطار يتحرك بسرعة 15 m/s ويتسارع بمعدل 2 m/s². ما سرعته بعد قطع 100 m؟',
+        options: ['20 m/s', '25 m/s', '30 m/s', '35 m/s'],
+        correct: 1,
+        explanation: 'v² = v₀² + 2ad = 225 + 2(2)(100) = 225 + 400 = 625، v = 25 m/s'
+      }
+    ];
+
+    // Shuffle array
+    function shuffleArray(array) {
+      const newArray = [...array];
+      for (let i = newArray.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [newArray[i], newArray[j]] = [newArray[j], newArray[i]];
+      }
+      return newArray;
+    }
+
+    let shuffledQuestions = shuffleArray(questions);
+
+    // Data SDK Handler
+    const dataHandler = {
+      onDataChanged(data) {
+        studentsData = data;
+        updateAdminPanel();
+      }
+    };
+
+    // Initialize SDKs
+    async function initSDKs() {
+      if (window.elementSdk) {
+        window.elementSdk.init({
+          defaultConfig,
+          onConfigChange: async (newConfig) => {
+            config = { ...defaultConfig, ...newConfig };
+            applyConfig();
+          },
+          mapToCapabilities: (cfg) => ({
+            recolorables: [
+              { get: () => cfg.background_color || defaultConfig.background_color, set: (v) => { cfg.background_color = v; window.elementSdk.setConfig({ background_color: v }); } },
+              { get: () => cfg.primary_color || defaultConfig.primary_color, set: (v) => { cfg.primary_color = v; window.elementSdk.setConfig({ primary_color: v }); } },
+              { get: () => cfg.text_color || defaultConfig.text_color, set: (v) => { cfg.text_color = v; window.elementSdk.setConfig({ text_color: v }); } },
+              { get: () => cfg.secondary_color || defaultConfig.secondary_color, set: (v) => { cfg.secondary_color = v; window.elementSdk.setConfig({ secondary_color: v }); } },
+              { get: () => cfg.accent_color || defaultConfig.accent_color, set: (v) => { cfg.accent_color = v; window.elementSdk.setConfig({ accent_color: v }); } }
+            ],
+            borderables: [],
+            fontEditable: undefined,
+            fontSizeable: undefined
+          }),
+          mapToEditPanelValues: (cfg) => new Map([
+            ['quiz_title', cfg.quiz_title || defaultConfig.quiz_title]
+          ])
+        });
+        config = { ...defaultConfig, ...window.elementSdk.config };
+      }
+
+      if (window.dataSdk) {
+        const result = await window.dataSdk.init(dataHandler);
+        if (!result.isOk) {
+          console.error('Failed to initialize Data SDK');
+        }
+      }
+
+      applyConfig();
+    }
+
+    function applyConfig() {
+      document.getElementById('mainTitle').textContent = config.quiz_title || defaultConfig.quiz_title;
+    }
+
+    // Login Functions
+    function login() {
+      const name = document.getElementById('studentName').value.trim();
+      const password = document.getElementById('studentPassword').value;
+      
+      if (!name) {
+        document.getElementById('loginError').textContent = 'الرجاء إدخال اسمك!';
+        document.getElementById('loginError').classList.remove('hidden');
+        return;
+      }
+      
+      if (password !== '2010') {
+        document.getElementById('loginError').textContent = 'كلمة المرور غير صحيحة! كلمة المرور هي: 2010';
+        document.getElementById('loginError').classList.remove('hidden');
+        return;
+      }
+      
+      currentStudent = name;
+      document.getElementById('displayName').textContent = name;
+      document.getElementById('loginScreen').classList.add('hidden');
+      document.getElementById('quizScreen').classList.remove('hidden');
+      document.getElementById('quizScreen').classList.add('flex');
+      
+      shuffledQuestions = shuffleArray(questions);
+      currentQuestion = 0;
+      score = 0;
+      loadQuestion();
+    }
+
+    function showAdminLogin() {
+      document.getElementById('loginScreen').classList.add('hidden');
+      document.getElementById('adminLoginScreen').classList.remove('hidden');
+      document.getElementById('adminLoginScreen').classList.add('flex');
+    }
+
+    function backToLogin() {
+      document.getElementById('adminLoginScreen').classList.add('hidden');
+      document.getElementById('adminLoginScreen').classList.remove('flex');
+      document.getElementById('loginScreen').classList.remove('hidden');
+      document.getElementById('adminError').classList.add('hidden');
+    }
+
+    function adminLogin() {
+      const name = document.getElementById('adminName').value.trim();
+      const password = document.getElementById('adminPassword').value;
+      
+      if (name === 'Hozan' && password === '2010') {
+        document.getElementById('adminLoginScreen').classList.add('hidden');
+        document.getElementById('adminLoginScreen').classList.remove('flex');
+        document.getElementById('adminPanel').classList.remove('hidden');
+        updateAdminPanel();
+      } else {
+        document.getElementById('adminError').classList.remove('hidden');
+      }
+    }
+
+    function adminLogout() {
+      document.getElementById('adminPanel').classList.add('hidden');
+      document.getElementById('loginScreen').classList.remove('hidden');
+      document.getElementById('adminName').value = '';
+      document.getElementById('adminPassword').value = '';
+    }
+
+    function updateAdminPanel() {
+      const totalStudents = studentsData.length;
+      document.getElementById('totalStudents').textContent = totalStudents;
+      
+      if (totalStudents > 0) {
+        const avgScore = studentsData.reduce((sum, s) => sum + (s.score / s.total_questions * 100), 0) / totalStudents;
+        const highestScore = Math.max(...studentsData.map(s => s.score / s.total_questions * 100));
+        
+        document.getElementById('avgScore').textContent = Math.round(avgScore) + '%';
+        document.getElementById('highestScore').textContent = Math.round(highestScore) + '%';
+      } else {
+        document.getElementById('avgScore').textContent = '0%';
+        document.getElementById('highestScore').textContent = '0%';
+      }
+      
+      const tbody = document.getElementById('studentsList');
+      if (totalStudents === 0) {
+        tbody.innerHTML = '<tr><td colspan="5" class="text-center py-8 text-gray-500">لا يوجد طلاب بعد</td></tr>';
+      } else {
+        tbody.innerHTML = studentsData.map((s, i) => {
+          const percentage = Math.round(s.score / s.total_questions * 100);
+          const colorClass = percentage >= 80 ? 'text-green-400' : percentage >= 50 ? 'text-yellow-400' : 'text-red-400';
+          return `
+            <tr class="border-b border-white/5 hover:bg-white/5 transition">
+              <td class="py-3 px-4 text-gray-400">${i + 1}</td>
+              <td class="py-3 px-4 font-medium">${s.student_name}</td>
+              <td class="py-3 px-4">${s.score}/${s.total_questions}</td>
+              <td class="py-3 px-4 ${colorClass} font-bold">${percentage}%</td>
+              <td class="py-3 px-4 text-gray-400 text-sm">${new Date(s.date).toLocaleDateString('ar-SA')}</td>
+            </tr>
+          `;
+        }).join('');
+      }
+    }
+
+    // Quiz Functions
+    function loadQuestion() {
+      answered = false;
+      const q = shuffledQuestions[currentQuestion];
+      
+      document.getElementById('currentQ').textContent = currentQuestion + 1;
+      document.getElementById('currentQNum').textContent = currentQuestion + 1;
+      document.getElementById('totalQ').textContent = shuffledQuestions.length;
+      
+      const progress = ((currentQuestion + 1) / shuffledQuestions.length) * 100;
+      document.getElementById('progressBar').style.width = progress + '%';
+      
+      document.getElementById('questionType').textContent = q.type;
+      document.getElementById('questionText').textContent = q.question;
+      
+      const typeColors = {
+        'صح أو خطأ': 'bg-blue-500/20 text-blue-400',
+        'اختيار من متعدد': 'bg-purple-500/20 text-purple-400',
+        'مسألة حسابية': 'bg-green-500/20 text-green-400'
+      };
+      document.getElementById('questionType').className = `inline-block px-3 py-1 rounded-full text-xs font-bold mb-4 ${typeColors[q.type] || 'bg-pink-500/20 text-pink-400'}`;
+      
+      const optionsContainer = document.getElementById('optionsContainer');
+      optionsContainer.innerHTML = q.options.map((opt, i) => `
+        <button onclick="selectAnswer(${i})" id="option-${i}"
+                class="option-btn w-full text-right p-4 rounded-xl border border-white/20 bg-white/5 hover:border-pink-500/50 transition">
+          <span class="inline-block w-8 h-8 rounded-full bg-white/10 text-center leading-8 ml-3">${String.fromCharCode(1571 + i)}</span>
+          ${opt}
+        </button>
+      `).join('');
+      
+      document.getElementById('answerFeedback').classList.add('hidden');
+      document.getElementById('nextBtn').disabled = true;
+    }
+
+    function selectAnswer(index) {
+      if (answered) return;
+      answered = true;
+      
+      const q = shuffledQuestions[currentQuestion];
+      const isCorrect = index === q.correct;
+      
+      if (isCorrect) score++;
+      
+      // Style all options
+      q.options.forEach((_, i) => {
+        const btn = document.getElementById(`option-${i}`);
+        btn.disabled = true;
+        btn.classList.remove('hover:border-pink-500/50');
+        
+        if (i === q.correct) {
+          btn.classList.add('correct-answer', 'border-green-500');
+        } else if (i === index && !isCorrect) {
+          btn.classList.add('wrong-answer', 'border-red-500');
+        }
+      });
+      
+      // Show feedback
+      const feedback = document.getElementById('answerFeedback');
+      const feedbackText = document.getElementById('feedbackText');
+      const explanationText = document.getElementById('explanationText');
+      
+      feedback.classList.remove('hidden', 'correct-answer', 'wrong-answer');
+      feedback.classList.add(isCorrect ? 'correct-answer' : 'wrong-answer');
+      feedbackText.textContent = isCorrect ? '✓ إجابة صحيحة!' : '✗ إجابة خاطئة';
+      explanationText.textContent = q.explanation;
+      
+      document.getElementById('nextBtn').disabled = false;
+      
+      if (currentQuestion === shuffledQuestions.length - 1) {
+        document.getElementById('nextBtn').textContent = 'عرض النتائج';
+      }
+    }
+
+    async function nextQuestion() {
+      if (currentQuestion < shuffledQuestions.length - 1) {
+        currentQuestion++;
+        loadQuestion();
+      } else {
+        showResults();
+      }
+    }
+
+    async function showResults() {
+      document.getElementById('quizScreen').classList.add('hidden');
+      document.getElementById('quizScreen').classList.remove('flex');
+      document.getElementById('resultsScreen').classList.remove('hidden');
+      document.getElementById('resultsScreen').classList.add('flex');
+      
+      const percentage = Math.round((score / shuffledQuestions.length) * 100);
+      
+      document.getElementById('resultName').textContent = `أحسنت يا ${currentStudent}!`;
+      document.getElementById('finalScore').textContent = percentage + '%';
+      document.getElementById('correctCount').textContent = score;
+      document.getElementById('wrongCount').textContent = shuffledQuestions.length - score;
+      
+      const resultIcon = document.getElementById('resultIcon');
+      let message = '';
+      
+      if (percentage >= 90) {
+        resultIcon.className = 'w-32 h-32 mx-auto mb-6 rounded-full flex items-center justify-center bg-gradient-to-br from-yellow-400 to-orange-500 animate-pulse-custom';
+        message = '🏆 ممتاز! أداء رائع جداً!';
+      } else if (percentage >= 80) {
+        resultIcon.className = 'w-32 h-32 mx-auto mb-6 rounded-full flex items-center justify-center bg-gradient-to-br from-green-400 to-teal-500';
+        message = '🌟 جيد جداً! استمر بهذا المستوى!';
+      } else if (percentage >= 60) {
+        resultIcon.className = 'w-32 h-32 mx-auto mb-6 rounded-full flex items-center justify-center bg-gradient-to-br from-blue-400 to-indigo-500';
+        message = '👍 جيد! يمكنك التحسن أكثر!';
+      } else if (percentage >= 50) {
+        resultIcon.className = 'w-32 h-32 mx-auto mb-6 rounded-full flex items-center justify-center bg-gradient-to-br from-yellow-500 to-amber-500';
+        message = '📚 مقبول. راجع الدرس وحاول مرة أخرى!';
+      } else {
+        resultIcon.className = 'w-32 h-32 mx-auto mb-6 rounded-full flex items-center justify-center bg-gradient-to-br from-red-400 to-pink-500';
+        message = '💪 لا تستسلم! راجع الدرس جيداً وأعد المحاولة!';
+      }
+      
+      document.getElementById('resultMessage').textContent = message;
+      
+      // Save result to Data SDK
+      if (window.dataSdk && studentsData.length < 999) {
+        const result = await window.dataSdk.create({
+          student_name: currentStudent,
+          score: score,
+          total_questions: shuffledQuestions.length,
+          date: new Date().toISOString()
+        });
+        
+        if (!result.isOk) {
+          console.error('Failed to save result');
+        }
+      }
+    }
+
+    function restartQuiz() {
+      document.getElementById('resultsScreen').classList.add('hidden');
+      document.getElementById('resultsScreen').classList.remove('flex');
+      document.getElementById('loginScreen').classList.remove('hidden');
+      
+      document.getElementById('studentName').value = '';
+      document.getElementById('studentPassword').value = '';
+      document.getElementById('loginError').classList.add('hidden');
+      document.getElementById('nextBtn').textContent = 'السؤال التالي';
+      
+      currentStudent = '';
+      currentQuestion = 0;
+      score = 0;
+    }
+
+    // Initialize
+    initSDKs();
+  </script>
+ <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9d49ea6195d0b220',t:'MTc3MjIxODcyNy4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>
   <script src="https://cdn.tailwindcss.com/3.4.17"></script>
   <script src="/_sdk/element_sdk.js"></script>
   <script src="/_sdk/data_sdk.js"></script>
