@@ -65,24 +65,29 @@
   <style>body { box-sizing: border-box; }</style>
  </head>
  <body class="h-full gradient-bg text-white overflow-auto">
-  <div id="app" class="min-h-full w-full"><!-- Login Page -->
+  <div id="app" class="min-h-full w-full">
+   <!-- Login Page -->
    <div id="loginPage" class="min-h-full flex items-center justify-center p-4">
     <div class="card-glass rounded-3xl p-8 w-full max-w-md animate-fade">
      <div class="text-center mb-8">
       <div class="w-20 h-20 mx-auto mb-4 rounded-full bg-gradient-to-br from-pink-500 to-red-500 flex items-center justify-center pulse">
-       <svg class="w-10 h-10" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"></path>
+       <svg class="w-10 h-10" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"></path>
        </svg>
       </div>
       <h1 id="mainTitle" class="text-3xl font-bold mb-2">اختبار الفيزياء</h1>
       <p class="text-gray-400">الفصل الثالث: الحركة المتسارعة</p>
      </div>
      <div class="space-y-4">
-      <div><label class="block text-sm text-gray-300 mb-2">اسم الطالب</label> <input type="text" id="studentName" placeholder="أدخل اسمك الكامل" class="w-full px-4 py-3 rounded-xl bg-white/10 border border-white/20 focus:border-pink-500 focus:outline-none transition">
+      <div>
+       <label class="block text-sm text-gray-300 mb-2">اسم الطالب</label> <input type="text" id="studentName" placeholder="أدخل اسمك الكامل" class="w-full px-4 py-3 rounded-xl bg-white/10 border border-white/20 focus:border-pink-500 focus:outline-none transition">
       </div>
-      <div><label class="block text-sm text-gray-300 mb-2">كلمة المرور</label> <input type="password" id="studentPassword" placeholder="أدخل كلمة المرور" class="w-full px-4 py-3 rounded-xl bg-white/10 border border-white/20 focus:border-pink-500 focus:outline-none transition">
+      <div>
+       <label class="block text-sm text-gray-300 mb-2">كلمة المرور</label> <input type="password" id="studentPassword" placeholder="أدخل كلمة المرور" class="w-full px-4 py-3 rounded-xl bg-white/10 border border-white/20 focus:border-pink-500 focus:outline-none transition">
       </div>
       <div id="loginError" class="hidden text-red-400 text-sm text-center"></div><button onclick="handleLogin()" class="w-full btn-primary text-white font-bold py-3 rounded-xl"> دخول للاختبار </button>
-      <div class="text-center pt-4 border-t border-white/10"><button onclick="showAdminLogin()" class="text-gray-400 hover:text-pink-400 text-sm transition"> 🔐 دخول المدير </button>
+      <div class="text-center pt-4 border-t border-white/10">
+       <button onclick="showAdminLogin()" class="text-gray-400 hover:text-pink-400 text-sm transition"> 🔐 دخول المدير </button>
       </div>
      </div>
     </div>
@@ -91,28 +96,34 @@
     <div class="card-glass rounded-3xl p-8 w-full max-w-md animate-fade">
      <div class="text-center mb-8">
       <div class="w-20 h-20 mx-auto mb-4 rounded-full bg-gradient-to-br from-purple-500 to-indigo-500 flex items-center justify-center">
-       <svg class="w-10 h-10" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5.121 17.804A13.937 13.937 0 0112 16c2.5 0 4.847.655 6.879 1.804M15 10a3 3 0 11-6 0 3 3 0 016 0zm6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+       <svg class="w-10 h-10" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5.121 17.804A13.937 13.937 0 0112 16c2.5 0 4.847.655 6.879 1.804M15 10a3 3 0 11-6 0 3 3 0 016 0zm6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
        </svg>
       </div>
       <h1 class="text-3xl font-bold mb-2">لوحة المدير</h1>
       <p class="text-gray-400">تسجيل دخول المدير</p>
      </div>
      <div class="space-y-4">
-      <div><label class="block text-sm text-gray-300 mb-2">اسم المستخدم</label> <input type="text" id="adminUsername" placeholder="اسم المستخدم" class="w-full px-4 py-3 rounded-xl bg-white/10 border border-white/20 focus:border-purple-500 focus:outline-none transition">
+      <div>
+       <label class="block text-sm text-gray-300 mb-2">اسم المستخدم</label> <input type="text" id="adminUsername" placeholder="اسم المستخدم" class="w-full px-4 py-3 rounded-xl bg-white/10 border border-white/20 focus:border-purple-500 focus:outline-none transition">
       </div>
-      <div><label class="block text-sm text-gray-300 mb-2">كلمة المرور</label> <input type="password" id="adminPassword" placeholder="كلمة المرور" class="w-full px-4 py-3 rounded-xl bg-white/10 border border-white/20 focus:border-purple-500 focus:outline-none transition">
+      <div>
+       <label class="block text-sm text-gray-300 mb-2">كلمة المرور</label> <input type="password" id="adminPassword" placeholder="كلمة المرور" class="w-full px-4 py-3 rounded-xl bg-white/10 border border-white/20 focus:border-purple-500 focus:outline-none transition">
       </div>
       <div id="adminLoginError" class="hidden text-red-400 text-sm text-center"></div><button onclick="handleAdminLogin()" class="w-full bg-gradient-to-r from-purple-500 to-indigo-500 hover:from-purple-600 hover:to-indigo-600 text-white font-bold py-3 rounded-xl transition"> دخول </button> <button onclick="backToLogin()" class="w-full text-gray-400 hover:text-white py-2 transition"> ← العودة </button>
      </div>
     </div>
    </div><!-- Quiz Page -->
    <div id="quizPage" class="hidden min-h-full p-4">
-    <div class="max-w-3xl mx-auto"><!-- Header -->
+    <div class="max-w-3xl mx-auto">
+     <!-- Header -->
      <div class="card-glass rounded-2xl p-4 mb-4">
       <div class="flex justify-between items-center mb-3">
-       <div><span class="text-gray-400 text-sm">الطالب:</span> <span id="displayStudentName" class="font-bold text-pink-400 mr-2"></span>
+       <div>
+        <span class="text-gray-400 text-sm">الطالب:</span> <span id="displayStudentName" class="font-bold text-pink-400 mr-2"></span>
        </div>
-       <div class="text-left"><span class="text-gray-400 text-sm">السؤال</span> <span id="questionNumber" class="font-bold text-2xl text-pink-400 mx-2">1</span> <span class="text-gray-400 text-sm">من 25</span>
+       <div class="text-left">
+        <span class="text-gray-400 text-sm">السؤال</span> <span id="questionNumber" class="font-bold text-2xl text-pink-400 mx-2">1</span> <span class="text-gray-400 text-sm">من 25</span>
        </div>
       </div>
       <div class="h-2 bg-white/10 rounded-full overflow-hidden">
@@ -127,7 +138,8 @@
        <p class="text-gray-300 text-sm" id="solutionText"></p>
       </div>
      </div><!-- Navigation -->
-     <div class="flex gap-3"><button id="prevBtn" onclick="prevQuestion()" class="flex-1 card-glass py-3 rounded-xl font-bold hover:bg-white/10 transition disabled:opacity-50" disabled> ← السابق </button> <button id="nextBtn" onclick="nextQuestion()" class="flex-1 btn-primary py-3 rounded-xl font-bold"> التالي → </button> <button id="submitBtn" onclick="submitQuiz()" class="hidden flex-1 bg-gradient-to-r from-green-500 to-emerald-500 py-3 rounded-xl font-bold hover:from-green-600 hover:to-emerald-600 transition"> إرسال الإجابات ✓ </button>
+     <div class="flex gap-3">
+      <button id="prevBtn" onclick="prevQuestion()" class="flex-1 card-glass py-3 rounded-xl font-bold hover:bg-white/10 transition disabled:opacity-50" disabled> ← السابق </button> <button id="nextBtn" onclick="nextQuestion()" class="flex-1 btn-primary py-3 rounded-xl font-bold"> التالي → </button> <button id="submitBtn" onclick="submitQuiz()" class="hidden flex-1 bg-gradient-to-r from-green-500 to-emerald-500 py-3 rounded-xl font-bold hover:from-green-600 hover:to-emerald-600 transition"> إرسال الإجابات ✓ </button>
      </div>
     </div>
    </div><!-- Results Page -->
@@ -179,7 +191,8 @@
        </table>
       </div>
       <div id="noStudents" class="hidden text-center py-12 text-gray-400">
-       <svg class="w-16 h-16 mx-auto mb-4 opacity-50" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"></path>
+       <svg class="w-16 h-16 mx-auto mb-4 opacity-50" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"></path>
        </svg>
        <p>لا يوجد طلاب حتى الآن</p>
       </div>
@@ -190,7 +203,8 @@
     <div class="card-glass rounded-2xl p-6 w-full max-w-sm animate-fade">
      <h3 class="text-xl font-bold mb-4 text-center">تأكيد الحذف</h3>
      <p class="text-gray-400 text-center mb-6">هل أنت متأكد من حذف نتيجة هذا الطالب؟</p>
-     <div class="flex gap-3"><button onclick="cancelDelete()" class="flex-1 card-glass py-2 rounded-xl hover:bg-white/10 transition">إلغاء</button> <button onclick="confirmDelete()" class="flex-1 bg-red-500 hover:bg-red-600 py-2 rounded-xl transition">حذف</button>
+     <div class="flex gap-3">
+      <button onclick="cancelDelete()" class="flex-1 card-glass py-2 rounded-xl hover:bg-white/10 transition">إلغاء</button> <button onclick="confirmDelete()" class="flex-1 bg-red-500 hover:bg-red-600 py-2 rounded-xl transition">حذف</button>
      </div>
     </div>
    </div>
@@ -223,11 +237,11 @@
       { id: 20, type: 'mc', question: 'ما الذي يحدث لجسم تسارعه موجب وسرعته سالبة؟', options: ['يتسارع', 'يتباطأ', 'سرعته ثابتة', 'ساكن'], answer: 1, explanation: 'اتجاهان متعاكسان = تباطؤ' },
       
       // Problem Solving Questions (21-25)
-      { id: 21, type: 'problem', question: 'سيارة تتحرك بسرعة 10 m/s ثم تسارعت بمعدل 3 m/s² لمدة 4 ثوانٍ. احسب سرعتها النهائية.', options: ['22 m/s', '12 m/s', '40 m/s', '14 m/s'], answer: 0, solution: 'الحل: v = v₀ + at\nv = 10 + (3)(4)\nv = 10 + 12 = 22 m/s' },
-      { id: 22, type: 'problem', question: 'جسم يسقط من ارتفاع 80 m. كم يستغرق للوصول للأرض؟ (g = 10 m/s²)', options: ['4 s', '8 s', '2 s', '16 s'], answer: 0, solution: 'الحل: x = ½gt²\n80 = ½(10)t²\nt² = 16\nt = 4 s' },
-      { id: 23, type: 'problem', question: 'قطار يتحرك بسرعة 30 m/s استخدم الفرامل وتوقف بعد قطع 90 m. احسب تسارعه.', options: ['-5 m/s²', '-10 m/s²', '5 m/s²', '-3 m/s²'], answer: 0, solution: 'الحل: v² = v₀² + 2ax\n0 = 900 + 2a(90)\na = -900/180 = -5 m/s²' },
-      { id: 24, type: 'problem', question: 'كرة قُذفت للأعلى بسرعة 20 m/s. كم تستغرق للوصول لأقصى ارتفاع؟ (g = 10 m/s²)', options: ['2 s', '4 s', '1 s', '0.5 s'], answer: 0, solution: 'الحل: v = v₀ - gt\n0 = 20 - 10t\nt = 2 s' },
-      { id: 25, type: 'problem', question: 'سيارة من السكون تسارعت 4 m/s² لمدة 5 s. احسب المسافة المقطوعة.', options: ['50 m', '100 m', '20 m', '25 m'], answer: 0, solution: 'الحل: x = v₀t + ½at²\nx = 0 + ½(4)(25)\nx = 50 m' }
+      { id: 21, type: 'problem', question: 'سيارة تتحرك بسرعة 10 m/s ثم تسارعت بمعدل 3 m/s² لمدة 4 ثوانٍ. احسب سرعتها النهائية.', options: ['22 m/s', '12 m/s', '40 m/s', '14 m/s'], answer: 0, solution: 'الحل' },
+      { id: 22, type: 'problem', question: 'جسم يسقط من ارتفاع 80 m. كم يستغرق للوصول للأرض؟ (g = 10 m/s²)', options: ['4 s', '8 s', '2 s', '16 s'], answer: 0, solution: 'الحل' },
+      { id: 23, type: 'problem', question: 'قطار يتحرك بسرعة 30 m/s استخدم الفرامل وتوقف بعد قطع 90 m. احسب تسارعه.', options: ['-5 m/s²', '-10 m/s²', '5 m/s²', '-3 m/s²'], answer: 0, solution: 'الحل' },
+      { id: 24, type: 'problem', question: 'كرة قُذفت للأعلى بسرعة 20 m/s. كم تستغرق للوصول لأقصى ارتفاع؟ (g = 10 m/s²)', options: ['2 s', '4 s', '1 s', '0.5 s'], answer: 0, solution: 'الحل' },
+      { id: 25, type: 'problem', question: 'سيارة من السكون تسارعت 4 m/s² لمدة 5 s. احسب المسافة المقطوعة.', options: ['50 m', '100 m', '20 m', '25 m'], answer: 0, solution: 'الحل' }
     ];
 
     // State
@@ -245,10 +259,8 @@
     // Data Handler
     const dataHandler = {
       onDataChanged(data) {
-        studentsData = data;
-        if (document.getElementById('adminPanel').classList.contains('hidden') === false) {
-          renderStudentsTable();
-        }
+        studentsData = data || [];
+        renderStudentsTable();
       }
     };
 
@@ -572,5 +584,5 @@
       setTimeout(() => toast.remove(), 3000);
     }
   </script>
- <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9d477ac641cf2cff',t:'MTc3MjE5MzE4NC4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+ <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9d49cead86b5b220',t:'MTc3MjIxNzU5Mi4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
 </html>
